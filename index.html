@@ -1,0 +1,247 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Study Plan Tracker</title>
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      background-color: #1e1e1e;
+      color: #f0f0f0;
+      margin: 0;
+      padding: 0;
+    }
+    header {
+      background: #2c2c2c;
+      padding: 20px;
+      text-align: center;
+      font-size: 24px;
+      font-weight: bold;
+    }
+    .container {
+      padding: 20px;
+      max-width: 900px;
+      margin: auto;
+    }
+    .card {
+      background: #2c2c2c;
+      margin: 10px 0;
+      padding: 15px;
+      border-radius: 12px;
+      box-shadow: 0 4px 10px rgba(0,0,0,0.5);
+    }
+    .subject-title {
+      font-size: 20px;
+      font-weight: bold;
+      cursor: pointer;
+      margin-bottom: 10px;
+    }
+    .day {
+      margin: 10px 0;
+      padding: 10px;
+      border-radius: 10px;
+      background: #3a3a3a;
+    }
+    button {
+      padding: 6px 12px;
+      border: none;
+      border-radius: 8px;
+      cursor: pointer;
+      margin: 3px;
+      background: #444;
+      color: #fff;
+      transition: 0.3s;
+    }
+    button:hover {
+      background: #666;
+    }
+    textarea, input {
+      width: 100%;
+      background: #2c2c2c;
+      border: 1px solid #555;
+      border-radius: 8px;
+      padding: 8px;
+      margin-top: 5px;
+      color: #f0f0f0;
+    }
+    .hidden {
+      display: none;
+    }
+    .analytics {
+      background: #2c2c2c;
+      padding: 15px;
+      border-radius: 12px;
+      margin-bottom: 20px;
+      text-align: center;
+      font-size: 18px;
+    }
+    .save-container {
+      text-align: center;
+      margin-top: 20px;
+    }
+    .save-container button {
+      background: #5a5a5a;
+      font-size: 16px;
+      padding: 10px 20px;
+    }
+  </style>
+</head>
+<body>
+  <header>📚 Study Plan Tracker</header>
+  <div class="container">
+    <div class="analytics">
+      <p><strong>Total Study Time:</strong> <span id="totalTime">0h 0m 0s</span></p>
+      <p><strong>Total Practice Problems:</strong> <span id="totalProblems">0</span></p>
+    </div>
+
+    <div id="subjects"></div>
+
+    <div class="save-container">
+      <button onclick="manualSave()">💾 Save Progress</button>
+    </div>
+  </div>
+
+  <script>
+    const data = {
+      Maths: {
+        "9": "Algebra",
+        "10": "Analytic Geometry",
+        "11": "Trigonometry",
+        "12": "Calculus",
+        "13": "Calculus"
+      },
+      Chemistry: {
+        "14": "Organic Chemistry",
+        "15": "Organic Chemistry",
+        "16": "Organic Chemistry",
+        "17": "Volumetric Analysis",
+        "18": "ElectroChemistry",
+        "19": "Practice Problems",
+        "20": "Practice Problems"
+      },
+      Physics: {
+        "21": "Wave and Optics",
+        "22": "Thermodynamics & Electrical Circuits",
+        "23": "Rotational Dynamics",
+        "24": "Modern Physics"
+      }
+    };
+
+    let studyData = JSON.parse(localStorage.getItem("studyData")) || {};
+
+    function saveData() {
+      localStorage.setItem("studyData", JSON.stringify(studyData));
+      updateAnalytics();
+    }
+
+    function manualSave() {
+      saveData();
+      alert("Progress saved successfully ✅");
+    }
+
+    function toggleSubject(subject) {
+      document.getElementById("days-"+subject).classList.toggle("hidden");
+    }
+
+    function toggleTimer(subject, day) {
+      const key = subject+day;
+      if (!studyData[key]) studyData[key] = {time:0, running:false, notes:"", problems:0};
+      let entry = studyData[key];
+      if (entry.running) {
+        entry.running = false;
+        entry.lastUpdate = null;
+      } else {
+        entry.running = true;
+        entry.lastUpdate = Date.now();
+        runTimer(subject, day);
+      }
+      saveData();
+    }
+
+    function resetTimer(subject, day) {
+      const key = subject+day;
+      if (!studyData[key]) return;
+      studyData[key].time = 0;
+      studyData[key].running = false;
+      studyData[key].lastUpdate = null;
+      document.getElementById(`time-${key}`).innerText = "0h 0m 0s";
+      saveData();
+    }
+
+    function runTimer(subject, day) {
+      const key = subject+day;
+      let entry = studyData[key];
+      if (entry.running) {
+        let now = Date.now();
+        entry.time += Math.floor((now - entry.lastUpdate)/1000);
+        entry.lastUpdate = now;
+        document.getElementById(`time-${key}`).innerText = formatTime(entry.time);
+        saveData();
+        setTimeout(()=>runTimer(subject, day),1000);
+      }
+    }
+
+    function formatTime(sec) {
+      let h = Math.floor(sec/3600);
+      let m = Math.floor((sec%3600)/60);
+      let s = sec%60;
+      return `${h}h ${m}m ${s}s`;
+    }
+
+    function updateNotes(subject, day, val){
+      const key = subject+day;
+      if (!studyData[key]) studyData[key] = {time:0, running:false, notes:"", problems:0};
+      studyData[key].notes = val;
+      saveData();
+    }
+
+    function updateProblems(subject, day, val){
+      const key = subject+day;
+      if (!studyData[key]) studyData[key] = {time:0, running:false, notes:"", problems:0};
+      studyData[key].problems = parseInt(val)||0;
+      saveData();
+    }
+
+    function updateAnalytics(){
+      let totalTime = 0, totalProblems=0;
+      Object.values(studyData).forEach(e=>{
+        totalTime += e.time||0;
+        totalProblems += e.problems||0;
+      });
+      document.getElementById("totalTime").innerText = formatTime(totalTime);
+      document.getElementById("totalProblems").innerText = totalProblems;
+    }
+
+    function loadUI(){
+      const subjectsDiv = document.getElementById("subjects");
+      for (let subject in data){
+        const card = document.createElement("div");
+        card.className = "card";
+        card.innerHTML = `<div class='subject-title' onclick="toggleSubject('${subject}')">${subject}</div><div id='days-${subject}' class='hidden'></div>`;
+        subjectsDiv.appendChild(card);
+
+        const daysDiv = card.querySelector(`#days-${subject}`);
+        for (let day in data[subject]){
+          const key = subject+day;
+          let entry = studyData[key] || {time:0, running:false, notes:"", problems:0};
+          const dayDiv = document.createElement("div");
+          dayDiv.className = "day";
+          dayDiv.innerHTML = `
+            <strong>Date ${day}:</strong> ${data[subject][day]}<br>
+            <span id="time-${key}">${formatTime(entry.time)}</span><br>
+            <button onclick="toggleTimer('${subject}', '${day}')">Start/Pause</button>
+            <button onclick="resetTimer('${subject}', '${day}')">Reset</button><br>
+            Notes:<br><textarea oninput="updateNotes('${subject}','${day}',this.value)">${entry.notes}</textarea><br>
+            Practice Problems:<input type='number' value='${entry.problems}' oninput="updateProblems('${subject}','${day}',this.value)">
+          `;
+          daysDiv.appendChild(dayDiv);
+        }
+      }
+      updateAnalytics();
+    }
+
+    loadUI();
+  </script>
+</body>
+</html>
