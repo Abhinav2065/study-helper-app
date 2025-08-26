@@ -1,31 +1,18 @@
-const data = {
-      Maths: {
-        "9": "Algebra",
-        "10": "Analytic Geometry",
-        "11": "Trigonometry",
-        "12": "Calculus",
-        "13": "Calculus"
-      },
-      Chemistry: {
-        "14": "Organic Chemistry",
-        "15": "Organic Chemistry",
-        "16": "Organic Chemistry",
-        "17": "Volumetric Analysis",
-        "18": "ElectroChemistry",
-        "19": "Practice Problems",
-        "20": "Practice Problems"
-      },
-      Physics: {
-        "21": "Wave and Optics",
-        "22": "Thermodynamics & Electrical Circuits",
-        "23": "Rotational Dynamics",
-        "24": "Modern Physics"
-      },
-      Others: {
-        "Any time": "Study anything but add notes!"
-      }
-    };
+let data = {};
 
+// Fetch the JSON data
+fetch('data.json')
+  .then(response => response.json())
+  .then(jsonData => {
+    data = jsonData;
+    loadUI(); // Call your UI loading function after data is loaded
+  })
+  .catch(error => {
+    console.error('Error loading JSON data:', error);
+    // Fallback to empty data or handle error
+    data = {};
+    loadUI();
+  });
     let studyData = JSON.parse(localStorage.getItem("studyData")) || {};
 
     function saveData() {
@@ -137,6 +124,10 @@ const data = {
         }
       }
       updateAnalytics();
+    }
+
+    function addSubChap() {
+        window.location.href = "update.html";
     }
 
     loadUI();

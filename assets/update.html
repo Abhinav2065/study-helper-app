@@ -1,0 +1,59 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Study Plan Tracker</title>
+    <link rel="stylesheet" href="styles.css">
+  </head>
+<body>
+
+ <header>📚 Study Plan Tracker</header>
+  <div class="container">
+    <div class="analytics">
+      Add or Update Subjects or Chapters Here!
+    </div>
+
+    <div class="analytics">
+      Add Subjects:
+    </div>
+        
+    <form id="subject-form">
+      <div class="form-group">
+        <label for="text">Subject Name:</label>
+        <div class="password-container">
+          <input type="text" id="subject" name="subject" placeholder="Enter the Subject Name" required>
+        </div>
+      </div>
+      <button type="submit_sub" class="save-container">Enter</button>
+    </form>
+
+    <div class="analytics">
+      Add Chapters in a Subject:
+    </div>
+        
+    <form id="subject-form">
+      <div class="form-group">
+        <label for="text">Subject Name:</label>
+        <div class="password-container">
+          <input type="text" id="subject_ch" name="subject_ch" placeholder="Enter the Subject Name" required>
+        </div>
+      </div>
+      <div class="form-group">
+        <label for="text">Chapter Name:</label>
+        <div class="password-container">
+          <input type="text" id="chapter_ch" name="chapter_ch" placeholder="Enter the Chapter Name" required>
+        </div>
+      </div>
+      <button type="submit_ch" class="save-container">Enter</button>
+    </form>
+  
+
+    
+    <div class="message" id="message"></div>
+  </div>
+
+  <script src="update.js">
+  </script>
+</body>
+</html>
