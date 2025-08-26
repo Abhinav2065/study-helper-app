@@ -1,0 +1,80 @@
+ body {
+      font-family: Arial, sans-serif;
+      background-color: #1e1e1e;
+      color: #f0f0f0;
+      margin: 0;
+      padding: 0;
+    }
+    header {
+      background: #2c2c2c;
+      padding: 20px;
+      text-align: center;
+      font-size: 24px;
+      font-weight: bold;
+    }
+    .container {
+      padding: 20px;
+      max-width: 900px;
+      margin: auto;
+    }
+    .card {
+      background: #2c2c2c;
+      margin: 10px 0;
+      padding: 15px;
+      border-radius: 12px;
+      box-shadow: 0 4px 10px rgba(0,0,0,0.5);
+    }
+    .subject-title {
+      font-size: 20px;
+      font-weight: bold;
+      cursor: pointer;
+      margin-bottom: 10px;
+    }
+    .day {
+      margin: 10px 0;
+      padding: 10px;
+      border-radius: 10px;
+      background: #3a3a3a;
+    }
+    button {
+      padding: 6px 12px;
+      border: none;
+      border-radius: 8px;
+      cursor: pointer;
+      margin: 3px;
+      background: #444;
+      color: #fff;
+      transition: 0.3s;
+    }
+    button:hover {
+      background: #666;
+    }
+    textarea, input {
+      width: 100%;
+      background: #2c2c2c;
+      border: 1px solid #555;
+      border-radius: 8px;
+      padding: 8px;
+      margin-top: 5px;
+      color: #f0f0f0;
+    }
+    .hidden {
+      display: none;
+    }
+    .analytics {
+      background: #2c2c2c;
+      padding: 15px;
+      border-radius: 12px;
+      margin-bottom: 20px;
+      text-align: center;
+      font-size: 18px;
+    }
+    .save-container {
+      text-align: center;
+      margin-top: 20px;
+    }
+    .save-container button {
+      background: #5a5a5a;
+      font-size: 16px;
+      padding: 10px 20px;
+    }
